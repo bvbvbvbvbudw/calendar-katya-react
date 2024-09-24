@@ -1,0 +1,28 @@
+.calendar-app {
+    margin: 0 auto;
+    max-width: 100vw;
+    padding: 20px;
+}
+
+.filters {
+    margin-bottom: 20px;
+}
+
+.date-range label, .group-filters label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+}
+
+.table th, .table td {
+    text-align: center;
+}
+
+.table {
+    margin-top: 20px;
+}
