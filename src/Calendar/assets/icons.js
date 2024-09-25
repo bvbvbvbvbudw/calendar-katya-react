@@ -12,7 +12,7 @@ const SettingsIcon = () => (
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
         viewBox="0 0 489.802 489.802"
-        style={{ enableBackground: 'new 0 0 489.802 489.802' }}
+        style={{enableBackground: 'new 0 0 489.802 489.802'}}
         xmlSpace="preserve"
     >
         <g>

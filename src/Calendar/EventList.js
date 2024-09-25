@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { formatTime, getMonthAbbreviation, getDayAbbreviation } from './assets/utils';
-import { schedule } from './schedule';
+import React, {useEffect} from 'react';
+import {formatTime, getMonthAbbreviation, getDayAbbreviation} from './assets/utils';
+import {schedule} from './schedule';
 
 export default function EventList() {
     const expandedSchedule = schedule.flatMap(event => {
@@ -17,7 +17,7 @@ export default function EventList() {
         return event.dates.map(date => {
             let time = event.time;
             if (date === '05.12.2024' && event.description.includes('Środki transportu')) {
-                time = { start: '09:05', end: '09:50' };
+                time = {start: '09:05', end: '09:50'};
             }
 
             return {
@@ -52,7 +52,7 @@ export default function EventList() {
     useEffect(() => {
         const activeElement = document.querySelector('.H3yh2e.active');
         if (activeElement) {
-            activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            activeElement.scrollIntoView({behavior: 'smooth', block: 'center'});
         }
     }, []);
 
@@ -97,11 +97,14 @@ export default function EventList() {
                                             {event.time.start} - {event.time.end}
                                         </div>
                                         <div role="gridcell" className="FVj2te uFexlc EmMre">
-                                            <div role="button" tabIndex="0" style={{ fontWeight: '500', whiteSpace: "normal" }} aria-label={`${formatTime(event.time.start)} - ${formatTime(event.time.end)}, ${event.description}`}>
+                                            <div role="button" tabIndex="0"
+                                                 style={{fontWeight: '500', whiteSpace: "normal"}}
+                                                 aria-label={`${formatTime(event.time.start)} - ${formatTime(event.time.end)}, ${event.description}`}>
                                                 {event.description} |
                                                 Location:
                                                 {event.location === "7 Fit, ul. Jana Pawła II 17, 20-535 Lublin" ? (
-                                                    <a href={createGoogleMapsLink(event.location)} target="_blank" rel="noopener noreferrer">
+                                                    <a href={createGoogleMapsLink(event.location)} target="_blank"
+                                                       rel="noopener noreferrer">
                                                         {event.location}
                                                     </a>
                                                 ) : (
@@ -110,7 +113,7 @@ export default function EventList() {
                                             </div>
                                         </div>
                                         <div role="gridcell" className="FVj2te AfMD1c">
-                                            <div className="poxnAc" style={{ borderColor: 'rgb(124, 179, 66)' }}>
+                                            <div className="poxnAc" style={{borderColor: 'rgb(124, 179, 66)'}}>
                                                 <span className="XuJrye">
                                                     Календарь: {event.subject}
                                                 </span>
