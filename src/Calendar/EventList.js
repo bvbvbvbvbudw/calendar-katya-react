@@ -1,58 +1,60 @@
 import React from 'react';
-import { formatTime, getMonthAbbreviation, getDayAbbreviation, onlyDay } from './assets/utils';
+import { formatTime, getMonthAbbreviation, getDayAbbreviation } from './assets/utils';
 import { schedule } from './schedule';
 
-const getTodayDayMonth = () => {
-    const today = new Date();
-    return `${today.getDate()}-${today.getMonth() + 1}`;
-};
-
-// Функция для преобразования даты из формата "dd.mm.yyyy" в формат "yyyy-mm-dd"
-const convertDate = (dateString) => {
-    const [day, month, year] = dateString.split('.').map(Number);
-    return new Date(year, month - 1, day); // Создаем объект Date
-};
-
 export default function EventList() {
-    const todayDayMonth = getTodayDayMonth();
+    const expandedSchedule = schedule.flatMap(event => {
+        if (event.dates.length === 0) {
+            return [{
+                date: 'Нет даты',
+                time: event.time,
+                description: event.description,
+                subject: event.subject,
+                location: event.location,
+            }];
+        }
 
-    // Преобразуем события, добавляя полное время с датой для сортировки
-    const eventsWithDates = schedule.flatMap((event) => {
-        return event.dates.map((date) => {
-            const startTimeParts = event.time.start.split(':').map(Number);
-            const endTimeParts = event.time.end.split(':').map(Number);
-
-            const startDateTime = convertDate(date);
-            startDateTime.setHours(startTimeParts[0], startTimeParts[1]);
-
-            const endDateTime = convertDate(date);
-            endDateTime.setHours(endTimeParts[0], endTimeParts[1]);
+        return event.dates.map(date => {
+            let time = event.time;
+            if (date === '05.12.2024' && event.description.includes('Środki transportu')) {
+                time = { start: '09:05', end: '09:50' };
+            }
 
             return {
-                ...event,
-                start: { dateTime: startDateTime },
-                end: { dateTime: endDateTime }
+                date,
+                time,
+                description: event.description,
+                subject: event.subject,
+                location: event.location,
             };
         });
     });
 
-    // Сортируем события по времени
-    const sortedEvents = eventsWithDates.sort((a, b) => new Date(a.start.dateTime) - new Date(b.start.dateTime));
+    expandedSchedule.sort((a, b) => {
+        if (a.date === 'Нет даты') return 1;
+        if (b.date === 'Нет даты') return -1;
 
-    // Группируем события по дням
-    const eventsByDay = sortedEvents.reduce((acc, event) => {
-        const eventDate = onlyDay(event.start.dateTime);
-        if (!acc[eventDate]) acc[eventDate] = [];
-        acc[eventDate].push(event);
+        const dateA = a.date.split('.').reverse().join('-');
+        const dateB = b.date.split('.').reverse().join('-');
+        return new Date(dateA) - new Date(dateB);
+    });
+
+    const eventsByDay = expandedSchedule.reduce((acc, event) => {
+        if (!acc[event.date]) {
+            acc[event.date] = [];
+        }
+        acc[event.date].push(event);
         return acc;
     }, {});
+
+    const todayDayMonth = new Date().toLocaleDateString('pl-PL');
 
     return (
         <div className="AvyU1e">
             <div role="grid" className="DCx23e">
                 {Object.keys(eventsByDay).length > 0 ? (
                     Object.keys(eventsByDay).map((day, index) => {
-                        const dayDate = new Date(day);
+                        const dayDate = new Date(day.split('.').reverse().join('-'));
 
                         if (isNaN(dayDate)) {
                             console.error('Invalid date:', day);
@@ -69,11 +71,10 @@ export default function EventList() {
                                             tabIndex="0"
                                             role="link"
                                         >
-                                            {day}
+                                            {day.slice(0,2)}
                                         </div>
                                         <div className="U2CF5e" aria-hidden="true">
                                             <div className="yRbOzc">
-                                                {/* Форматирование даты */}
                                                 {`${getMonthAbbreviation(dayDate)}, ${getDayAbbreviation(dayDate)}`}
                                             </div>
                                         </div>
@@ -84,16 +85,18 @@ export default function EventList() {
                                 {eventsByDay[day].map((event, idx) => (
                                     <div role="row" className="YOmXMd DSThoc" key={idx}>
                                         <div role="gridcell" className="FVj2te JxNhxc">
-                                            {formatTime(event.start.dateTime)} - {formatTime(event.end.dateTime)}
+                                            {/*{formatTime(event.time.start)} - {formatTime(event.time.end)}*/}
+                                            {event.time.start} - {event.time.end}
                                         </div>
                                         <div role="gridcell" className="FVj2te uFexlc EmMre">
                                             <div
                                                 role="button"
                                                 tabIndex="0"
                                                 style={{ fontWeight: '500' }}
-                                                aria-label={`${formatTime(event.start.dateTime)} - ${formatTime(event.end.dateTime)}, ${event.description}`}
+                                                aria-label={`${formatTime(event.time.start)} - ${formatTime(event.time.end)}, ${event.description}`}
                                             >
-                                                {event.description} | <br />
+                                                {event.description} |
+                                                Location: {event.location}
                                             </div>
                                         </div>
                                         <div role="gridcell" className="FVj2te AfMD1c">

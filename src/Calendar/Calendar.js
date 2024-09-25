@@ -23,6 +23,10 @@ export default function Calendar() {
 
     return (
         <div className="container calendar-app">
+            <i className="fas fa-settings" onClick={() => {document.getElementById('settings').classList.toggle('show')}}>S</i>
+            <div className="settings" id="settings">
+                a
+            </div>
             <div className="toggle-switch">
                 <label className="switch">
                     <span className="sun"></span>

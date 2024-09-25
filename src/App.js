@@ -6,8 +6,8 @@ import EventList from "./Calendar/EventList";
 function App() {
   return (
     <div className="App">
-      {/*<Calendar/>*/}
-        <EventList/>
+      <Calendar/>
+        {/*<EventList/>*/}
     </div>
   );
 }
