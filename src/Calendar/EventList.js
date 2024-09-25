@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { formatTime, getMonthAbbreviation, getDayAbbreviation } from './assets/utils';
 import { schedule } from './schedule';
 
@@ -49,6 +49,18 @@ export default function EventList() {
 
     const todayDayMonth = new Date().toLocaleDateString('pl-PL');
 
+    useEffect(() => {
+        const activeElement = document.querySelector('.H3yh2e.active');
+        if (activeElement) {
+            activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }, []);
+
+    const createGoogleMapsLink = (location) => {
+        const encodedLocation = encodeURIComponent(location);
+        return `https://www.google.com/maps?q=${encodedLocation}`;
+    };
+
     return (
         <div className="AvyU1e">
             <div role="grid" className="DCx23e">
@@ -57,13 +69,11 @@ export default function EventList() {
                         const dayDate = new Date(day.split('.').reverse().join('-'));
 
                         if (isNaN(dayDate)) {
-                            console.error('Invalid date:', day);
                             return null;
                         }
 
                         return (
                             <div key={index} role="rowgroup" className="OVSqWe">
-                                {/* Заголовок с датой */}
                                 <div role="gridcell" className="V4sZ3c">
                                     <h2 className="bf2t7b">
                                         <div
@@ -71,7 +81,7 @@ export default function EventList() {
                                             tabIndex="0"
                                             role="link"
                                         >
-                                            {day.slice(0,2)}
+                                            {day.slice(0, 2)}
                                         </div>
                                         <div className="U2CF5e" aria-hidden="true">
                                             <div className="yRbOzc">
@@ -81,22 +91,22 @@ export default function EventList() {
                                     </h2>
                                 </div>
 
-                                {/* События за день */}
                                 {eventsByDay[day].map((event, idx) => (
                                     <div role="row" className="YOmXMd DSThoc" key={idx}>
                                         <div role="gridcell" className="FVj2te JxNhxc">
-                                            {/*{formatTime(event.time.start)} - {formatTime(event.time.end)}*/}
                                             {event.time.start} - {event.time.end}
                                         </div>
                                         <div role="gridcell" className="FVj2te uFexlc EmMre">
-                                            <div
-                                                role="button"
-                                                tabIndex="0"
-                                                style={{ fontWeight: '500' }}
-                                                aria-label={`${formatTime(event.time.start)} - ${formatTime(event.time.end)}, ${event.description}`}
-                                            >
+                                            <div role="button" tabIndex="0" style={{ fontWeight: '500', whiteSpace: "normal" }} aria-label={`${formatTime(event.time.start)} - ${formatTime(event.time.end)}, ${event.description}`}>
                                                 {event.description} |
-                                                Location: {event.location}
+                                                Location:
+                                                {event.location === "7 Fit, ul. Jana Pawła II 17, 20-535 Lublin" ? (
+                                                    <a href={createGoogleMapsLink(event.location)} target="_blank" rel="noopener noreferrer">
+                                                        {event.location}
+                                                    </a>
+                                                ) : (
+                                                    event.location
+                                                )}
                                             </div>
                                         </div>
                                         <div role="gridcell" className="FVj2te AfMD1c">

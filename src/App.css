@@ -12,6 +12,12 @@ i {
 i, #settings {
   user-select: none;
 }
+.top-content {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  padding-top: 30px;
+}
 body {
   min-height: 100vh;
   margin: 0;
