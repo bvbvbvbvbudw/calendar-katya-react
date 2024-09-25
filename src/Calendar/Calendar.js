@@ -22,7 +22,7 @@ export default function Calendar() {
     return (
         <div className="container calendar-app">
             <div className="top-content">
-                <i className="fas fa-settings" onClick={() => {document.getElementById('settings').classList.toggle('show')}}><SettingsIcon/></i>
+                <i className="fas fa-settings" onClick={() => {document.getElementById('settings').classList.toggle('show')}}><SettingsIcon backgroundColor={color}/></i>
                 <div className="settings show   " id="settings">
                     <input type="color" value={color} onChange={(e) => {setColor(e.target.value)}}/>
                 </div>
